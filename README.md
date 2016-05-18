@@ -5,7 +5,7 @@
 
 # How to get this project
 
-You can use following command or as you prefer [download zip here](https://github.com/leandrocgsi/simple-rest-generic-repository/archive/master.zip) and import in your favourite IDE.
+You can execute following command or as you prefer [download zip here](https://github.com/leandrocgsi/simple-rest-generic-repository/archive/master.zip) and import in your favourite IDE.
 
 ```sh
 git clone https://github.com/leandrocgsi/simple-rest-generic-repository.git
