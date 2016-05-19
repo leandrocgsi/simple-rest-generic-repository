@@ -3,15 +3,13 @@ package br.com.erudio.services.implementations;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.erudio.models.Person;
+import br.com.erudio.repository.interfaces.IPersonRepository;
 import br.com.erudio.services.PersonService;
 
 @Service
@@ -19,15 +17,15 @@ public class PersonServiceImpl implements PersonService {
 	
 	private static final Logger logger = Logger.getLogger(PersonServiceImpl.class);
 	
-    @PersistenceContext
-    protected EntityManager entityManager;
+	@Autowired
+	private IPersonRepository personRepository;
     
     @Override
     @Transactional
     public Person create(Person person) {
     	try {
     		logger.info("Creating a person");
-			person = entityManager.merge(person);
+			person = personRepository.create(person);
 		} catch (Exception e) {
 			logger.error(e);
 		}
@@ -40,21 +38,19 @@ public class PersonServiceImpl implements PersonService {
     	Person person = new Person();
 		try {
     		logger.info("Finding all persons");
-    		person = entityManager.find(Person.class, Long.parseLong(personId));
+    		person = personRepository.findById(personId);
 		} catch (Exception e) {
 			logger.error(e);
 		}
         return person;
     }
 
-    @SuppressWarnings("unchecked")
-	@Override
+    @Override
     public List<Person> findAll() {
         ArrayList<Person> persons = new ArrayList<>();
     	try {
     		logger.info("Finding all persons");
-            Query query = entityManager.createQuery("from Person p");
-            persons = (ArrayList<Person>) query.getResultList();
+            persons = (ArrayList<Person>) personRepository.findAll();
 		} catch (Exception e) {
 			logger.error(e);
 		}
@@ -66,7 +62,7 @@ public class PersonServiceImpl implements PersonService {
     public Person update(Person person) {
     	try {
     		logger.info("Updating a person");
-			person = entityManager.merge(person);
+			person = personRepository.update(person);
 		} catch (Exception e) {
 			logger.error(e);
 		}
@@ -78,7 +74,7 @@ public class PersonServiceImpl implements PersonService {
     public void delete(Person person) {
 		try {
 			logger.info("Deleting a person");
-			entityManager.remove(person);
+			personRepository.delete(person);
 		} catch (Exception ex) {
 			logger.error(ex);
 		}
